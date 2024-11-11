@@ -1,0 +1,104 @@
+.calculator {
+    width: 300px; /* Base width for desktop */
+    padding: 18px;
+    background-color: FFFFFF;
+    border-radius: 8px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+    color: white;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto; /* Center calculator horizontally */
+}
+
+/* Display section */
+.display {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1.5em; /* Increased font size for better readability */
+    background-color: #bcb8b8;
+    color: rgb(20, 20, 20);
+    border: none;
+    outline: none;
+    text-align: right;
+    border-radius: 4px;
+}
+
+.result {
+    font-size: 1.5em;
+    color: #0f0;
+    padding: 10px 0;
+}
+
+/* Buttons section */
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px; /* Increased gap for better spacing */
+    width: 100%;
+}
+
+.button {
+    padding: 15px;
+    font-size: 1.1em;
+    background-color: rgb(0, 172, 193) !important;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: rgb(10, 216, 243) !important; /* Add hover effect */
+}
+
+.clear-button {
+    grid-column: span 4; /* Span across all columns */
+    padding: 10px;
+    font-size: 1.1em;
+    background-color:  rgba(230, 34, 34, 0.533);
+    color: rgb(29, 27, 27);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.clear-button:hover{
+    background-color: #3db70d;
+}
+
+.equal-button {
+    background-color: #3db70d !important; /* Distinct color for the equal button */
+}
+
+.equal-button:hover {
+    background-color: #00838f; /* Add hover effect */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .calculator {
+        width: 90%; /* Full width on smaller screens */
+        padding: 15px; /* Adjust padding for smaller screens */
+    }
+
+    .input {
+        font-size: 1.2em; /* Slightly reduce font size for input */
+    }
+
+    .result {
+        font-size: 1.2em; /* Reduce result font size */
+    }
+
+    .button {
+        font-size: 1em; /* Adjust button font size */
+        padding: 10px; /* Adjust padding */
+    }
+}
+

@@ -1,0 +1,260 @@
+:root {
+  --primary-color: #171717; /* Blue color for buttons */
+  --secondary-color: #f4f6f9; /* Light background */
+  --text-color: #171717; /* Darker text color */
+  --border-radius: 10px;
+  --box-shadow: 0 6px 12px rgba(0, 0, 0, 0.231);
+}
+
+body {
+  width: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+}
+
+.home-container {
+  max-width: 100%;
+  margin: auto;
+
+}
+
+.filter-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  margin-bottom: 30px;
+}
+
+.filter-section div {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter-section label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.filter-section select {
+  width: 100%;
+  padding: 10px;
+  border-radius: var(--border-radius);
+  border: 1px solid #d1d9e0;
+  background-color: #f9fbfc;
+  transition: border 0.3s;
+}
+
+.filter-section select:hover,
+.filter-section select:focus {
+  border-color: var(--primary-color);
+}
+
+.tests-section {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: var(--border-radius);
+ 
+}
+
+.hfour {
+  margin-bottom: 20px;
+  font-size: 1.5em;
+  color: var(--text-color);
+}
+
+.exam-cards-container {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(3, 1fr); /* Default: 3 columns */
+}
+
+/* Styling for individual exam cards */
+.exam-card {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.exam-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.exam-card h2 {
+  font-size: 1.2em;
+  margin-bottom: 15px;
+}
+
+.exam-card button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: var(--border-radius);
+  background-color: var(--primary-color);
+  color: #ffffff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.exam-card button:hover {
+  background-color: #09c052;
+}
+
+/* Responsive Styles */
+
+/* For very small screens (phones) */
+@media (max-width: 479px) {
+  .exam-cards-container {
+    max-width: 100%;
+    grid-template-columns: repeat(3, 1fr); /* 2 cards per row */
+    gap: 7px;
+  }
+  .hfour {
+    margin-bottom: 30px;
+    font-size: 1.2em;
+    color: var(--text-color);
+  }
+  .exam-card {
+    padding: 10px;
+  }
+  
+  .exam-card h2 {
+    font-size: 0.8em;
+  }
+  
+  .exam-card button {
+    padding: 6px 8px;
+    font-size: 0.7em;
+  }
+}
+
+/* For small devices (portrait tablets and larger phones) */
+@media (min-width: 480px) and (max-width: 767px) {
+  .exam-cards-container {
+    grid-template-columns: repeat(3, 1fr); /* 3 cards per row */
+    gap: 20px;
+  }
+  
+  .exam-card {
+    padding: 18px;
+  }
+  
+  .exam-card h2 {
+    font-size: 1.1em;
+  }
+  
+  .exam-card button {
+    padding: 10px 14px;
+  }
+}
+
+/* For medium devices (landscape tablets) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .exam-cards-container {
+    grid-template-columns: repeat(6, 1fr); /* 6 cards per row */
+    gap: 20px;
+  }
+  
+  .exam-card {
+    padding: 15px;
+  }
+  
+  .exam-card h2 {
+    font-size: 1.2em;
+  }
+  
+  .exam-card button {
+    padding: 10px 14px;
+    font-size: 1em;
+  }
+}
+
+/* For large devices (desktops) */
+@media (min-width: 1024px) {
+  .exam-cards-container {
+    grid-template-columns: repeat(8, 1fr); /* 8 cards per row */
+    gap: 20px;
+  }
+  
+  .exam-card {
+    padding: 20px;
+  }
+  
+  .exam-card h2 {
+    font-size: 1.2em;
+  }
+  
+  .exam-card button {
+    padding: 12px 16px;
+    font-size: 1em;
+  }
+}
+
+
+/* General Table Styles */
+.score-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.score-table thead {
+  background-color: #4a90e2; /* Primary Color */
+  color: #fff;
+}
+
+.score-table th,
+.score-table td {
+  padding: 15px;
+  text-align: center;
+  border: 1px solid #f0f0f0;
+}
+
+.score-table th {
+  font-weight: bold;
+}
+
+.score-table tbody tr:nth-child(even) {
+  background-color: #f4f6f9; /* Light background */
+}
+
+/* Mobile Responsiveness (to keep the table as is, but adjust the font and padding) */
+@media (max-width: 767px) {
+  .score-table {
+    font-size: 12px; /* Reduced font size for smaller devices */
+  }
+
+  .score-table th,
+  .score-table td {
+    padding: 10px; /* Reduced padding for smaller screens */
+  }
+
+  .score-table td {
+    word-wrap: break-word; /* Ensure text doesn't overflow */
+  }
+
+  .score-table tr {
+    display: table-row; /* Ensure the rows maintain a table layout */
+  }
+
+  /* Make sure content stays centered and readable */
+  .score-table th,
+  .score-table td {
+    text-align: center;
+  }
+}

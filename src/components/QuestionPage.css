@@ -1,0 +1,187 @@
+/* Align the question-container to the top but center horizontally */
+
+
+
+.question-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.145);
+    padding: 60px;
+    padding-bottom: 40px;
+    width: 65%;
+    max-width: 100%; /* Ensures the container doesn't exceed the viewport width */
+    line-height: 1.6;
+    font-family: sans-serif;
+    margin-top: 10px; /* Adjust to control vertical spacing from the top */
+    overflow-x: hidden; /* Hides horizontal scrollbars */
+}
+
+.question-container:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+.t1{
+    font-size: medium;
+
+    color: crimson;
+}
+.question-container h2 {
+    font-size: 1.2em;
+    text-align: center;
+    line-height: 1.5;
+
+    color: #333;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.cal_title{
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: large;
+}
+.question-container h3 {
+    font-size: 1.1em;
+    font-weight: 500;
+    color: #1d3557ec;
+    margin-bottom: 20px;
+    padding: 15px;
+    line-height: 1.4;
+
+    text-align: start;
+    border-bottom: 2px solid #6a6b6c31;
+    transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.option-label {
+    display: flex;
+    align-items: center;
+    margin: 11px 0;
+    padding: 8px;
+    font-size: 0.9em;
+    background-color: #f5f8fa;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    border: 1px solid transparent;
+}
+
+.option-label:hover {
+    background-color: #e0f7fa;
+    border-color: #00acc1;
+    transform: scale(1.02);
+}
+
+.option-label input {
+    margin-right: 12px;
+    transform: scale(1.3);
+}
+
+.option-label input:checked + .option-text {
+    color: #00796b;
+    font-weight: bold;
+}
+
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 35px;
+    gap: 15px;
+}
+
+.navigation-buttons button {
+    background-color: #00acc1;
+    color: #fff;
+    padding: 11px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 500;
+    transition: background 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 172, 193, 0.2);
+}
+
+.navigation-buttons button:hover {
+    background-color: #00838f;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 131, 143, 0.3);
+}
+
+.navigation-buttons button:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0, 131, 143, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .question-container h2 {
+        font-size: 1.5em;
+    }
+
+    .option-label {
+        font-size: 1em;
+        padding: 7px;
+    }
+    .t1{
+        font-size: small;
+    
+        color: crimson;
+    }
+
+    .navigation-buttons button {
+        padding: 8px 15px;
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 480px) {
+    .question-container {
+        padding: 6px 6px 20px 6px;
+        width: 98% !important;
+    }
+.t1{
+    font-size: small;
+
+    color: crimson;
+}
+.question-container h2 {
+        font-size: 1em;
+    }
+    .question-container h3 {
+        font-size: 0.9em;
+    }
+    .option-label {
+        font-size: 0.9em;
+        padding: 8px;
+    }
+
+    .navigation-buttons {
+        gap: 20px;
+    }
+
+    .navigation-buttons button {
+        padding: 8px;
+        font-size: 0.8em;
+        flex: 1;
+        margin-bottom: 8px;
+    }
+}
+
+.calculator-container {
+    font-size: medium;
+   
+    margin-top: 50px; /* Existing margin for spacing from the top */
+    padding: 20px;
+    margin-left: 60px;
+}
+
+@media (max-width: 480px) {
+    .calculator-container {
+        font-size: medium;
+        overflow-x: hidden; /* Prevent horizontal scrolling */
+        
+        margin-left: 5px;
+        margin-top: 40px; /* Add this line to create a gap between question container and calculator */
+    }  
+}
