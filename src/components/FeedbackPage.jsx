@@ -1,34 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom"; // Import useLocation
+import { useNavigate, useLocation } from "react-router-dom";
 import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
+import "jspdf-autotable";
+
 import "./FeedbackPage.css";
 import Navbar from "./Navbar";
 
 function FeedbackPage({ questions, answers, score, setScore, resetExamState }) {
   const navigate = useNavigate();
-  const location = useLocation(); // Use useLocation to access the state
+  const location = useLocation();
 
-  // Local state to store time and questionsAttempted
   const [time, setTime] = useState(0);
   const [questionsAttempted, setQuestionsAttempted] = useState(0);
-  const output = time/questionsAttempted
-
+  const output = questionsAttempted > 0 ? (time / questionsAttempted).toFixed(2) : 0;
 
   useEffect(() => {
-    // Check if location.state exists before accessing values
     if (location.state) {
       const { time, questionsAttempted } = location.state;
       setTime(time || 0);
       setQuestionsAttempted(questionsAttempted || 0);
     }
-  }, [location.state]); // Re-run the effect when location.state changes
-
-  console.log(time); // Log the values after state is set
-  console.log(questionsAttempted);
+  }, [location.state]);
 
   useEffect(() => {
-    // Calculate score based on answers
     let calculatedScore = 0;
     questions.forEach((question, index) => {
       if (answers[index] === question.answer) {
@@ -37,10 +31,6 @@ function FeedbackPage({ questions, answers, score, setScore, resetExamState }) {
     });
     setScore(calculatedScore);
 
-    // Use replace to prevent navigating back to QuestionPage
-    navigate("/feedback", { replace: true });
-
-    // Listen for beforeunload event to handle navigation away
     const handleBeforeUnload = (e) => {
       e.preventDefault();
       e.returnValue = "";
@@ -51,32 +41,151 @@ function FeedbackPage({ questions, answers, score, setScore, resetExamState }) {
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
-  }, [questions, answers, setScore, navigate]);
+  }, [questions, answers, setScore]);
 
-  // Function to handle PDF download
+
+
   const handleDownloadPDF = () => {
-    const feedbackElement = document.getElementById("feedback-page");
-    html2canvas(feedbackElement, { scale: 2 }).then((canvas) => {
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("p", "mm", "a4");
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-      pdf.addImage(imgData, "PNG", 0, 10, pdfWidth, pdfHeight);
-      pdf.save("Scorecard.pdf");
+    const pdf = new jsPDF("p", "mm", "a4");
+  
+    // Define margins
+    const marginLeft = 15;
+    const marginRight = 15;
+    const topMargin = 20;
+    const bottomMargin = 20;
+  
+    // Define page width and height
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+  
+    // Define maximum content area (excluding margins)
+    const contentWidth = pageWidth - marginLeft - marginRight;
+  
+    // Initialize Y position and check space
+    let yPosition = topMargin;
+    const lineHeight = 8;
+    const maxYPosition = pageHeight - bottomMargin;
+  
+    // Function to check and add a new page if content exceeds the page
+    const checkAndAddPage = (contentHeight) => {
+      if (yPosition + contentHeight > maxYPosition) {
+        pdf.addPage();
+        yPosition = topMargin;
+      }
+    };
+  
+    // Function to wrap text and avoid overflow
+    const wrapText = (text, maxWidth) => {
+      const words = text.split(" ");
+      let line = "";
+      const lines = [];
+  
+      words.forEach((word) => {
+        const testLine = line + word + " ";
+        const testWidth = pdf.getTextWidth(testLine);
+  
+        if (testWidth > maxWidth) {
+          lines.push(line.trim());
+          line = word + " ";
+        } else {
+          line = testLine;
+        }
+      });
+  
+      lines.push(line.trim());
+      return lines;
+    };
+  
+    // Title and score section
+    pdf.setFontSize(14);
+    pdf.setFont("helvetica", "bold");
+    pdf.text(`Score: ${score}/${questions.length}`, marginLeft, yPosition);
+    yPosition += lineHeight + 10; // Adding space after title
+  
+    pdf.setFontSize(10);
+    pdf.text(`Percentage: ${((score / questions.length) * 100).toFixed(2)}%`, marginLeft, yPosition);
+    yPosition += lineHeight;
+  
+    const speed = parseFloat(output) || 0;
+    pdf.text(`Speed: ${speed.toFixed(2)} sec per question`, marginLeft, yPosition);
+    yPosition += lineHeight;
+  
+    pdf.text(`Attempted Questions: ${questionsAttempted}`, marginLeft, yPosition);
+    yPosition += lineHeight + 10;
+  
+    // Loop through each question
+    questions.forEach((question, index) => {
+      const userAnswer = answers[index] === undefined ? "Unattempted" : answers[index];
+      const correctAnswer = question.answer;
+      const status = userAnswer === correctAnswer ? "Correct" : "Incorrect";
+      const explanationSteps = question.explanation.join(" ").split(/(?=Step \d+:)/);
+  
+      // Wrap and check space for the question text
+      pdf.setFont("helvetica", "bold");
+      const questionLines = wrapText(`${index + 1}. ${question.question}`, contentWidth);
+      checkAndAddPage(questionLines.length * lineHeight);
+      questionLines.forEach((line) => {
+        pdf.text(line, marginLeft, yPosition);
+        yPosition += lineHeight;
+      });
+  
+      // Wrap and check space for user answer, correct answer, and status
+      pdf.setFont("helvetica", "normal");
+  
+      const answerLines = wrapText(`Your Answer: ${userAnswer}`, contentWidth);
+      checkAndAddPage(answerLines.length * lineHeight);
+      answerLines.forEach((line) => {
+        pdf.text(line, marginLeft, yPosition);
+        yPosition += lineHeight;
+      });
+  
+      const correctAnswerLines = wrapText(`Correct Answer: ${correctAnswer}`, contentWidth);
+      checkAndAddPage(correctAnswerLines.length * lineHeight);
+      correctAnswerLines.forEach((line) => {
+        pdf.text(line, marginLeft, yPosition);
+        yPosition += lineHeight;
+      });
+  
+      const statusLines = wrapText(`Status: ${status}`, contentWidth);
+      checkAndAddPage(statusLines.length * lineHeight);
+      statusLines.forEach((line) => {
+        pdf.text(line, marginLeft, yPosition);
+        yPosition += lineHeight;
+      });
+  
+      // Wrap and check space for explanation steps
+      explanationSteps.forEach((step) => {
+        const stepLines = wrapText(step.trim(), contentWidth);
+        checkAndAddPage(stepLines.length * lineHeight);
+        stepLines.forEach((line) => {
+          pdf.text(line, marginLeft, yPosition);
+          yPosition += lineHeight;
+        });
+      });
+  
+      // Add extra space after each question
+      yPosition += 10;
     });
+  
+    // Save the PDF
+    pdf.save("Scorecard.pdf");
   };
+  
+ 
 
-  // Function to handle reset and navigation back to home
+
+
+  // Handle back to home
   const handleBackToHome = () => {
-    resetExamState(); // Reset exam state when going back
-    navigate("/"); // Navigate back to HomePage
+    resetExamState();
+    navigate("/");
   };
 
   return (
     <>
       <Navbar />
       <div className="container">
-        <div className="feedback-container" id="feedback-page">
+        <div className="feedback-container">
           <div className="but">
             <button className="download-button" onClick={handleDownloadPDF}>
               Download PDF
@@ -93,40 +202,24 @@ function FeedbackPage({ questions, answers, score, setScore, resetExamState }) {
                 <th>Score</th>
                 <th>Percentage</th>
                 <th>Speed</th>
-                <th>Attempted Questions</th> {/* Add attempted questions */}
+                <th>Attempted Questions</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>{score}/{questions.length}</td>
                 <td>{((score / questions.length) * 100).toFixed(2)}%</td>
-                <td>{output.toFixed(2)} sec per question</td> {/* Use the time value */}
-                <td>{questionsAttempted}</td> {/* Display attempted questions */}
+                <td>{output} sec per question</td>
+                <td>{questionsAttempted}</td>
               </tr>
             </tbody>
           </table>
 
           {questions.map((question, index) => (
             <div key={index} className="question-review">
-              <h3>
-                {index + 1}. {question.question}
-              </h3>
-              <p
-                className={
-                  answers[index] === question.answer
-                    ? "correct"
-                    : answers[index] === undefined
-                    ? "unattempted"
-                    : "incorrect"
-                }
-              >
-                Your Answer:{" "}
-                {answers[index] === undefined ? "" : answers[index]}
-                {answers[index] === undefined
-                  ? "Unattempted"
-                  : answers[index] === question.answer
-                  ? "Correct"
-                  : "  ( Incorrect)"}
+              <h3>{index + 1}. {question.question}</h3>
+              <p className={answers[index] === question.answer ? "correct" : "incorrect"}>
+                Your Answer: {answers[index] === undefined ? "Unattempted" : answers[index]}
               </p>
               <p>Correct Answer: {question.answer}</p>
               <p>Explanation:</p>
